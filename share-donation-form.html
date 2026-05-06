@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Share Furniture — Donate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
+  :root {
+    --gold: #E8A020;
+    --gold-light: #F5C842;
+    --gold-dim: #B87D18;
+    --black: #111110;
+    --surface: #FAFAF8;
+    --card: #FFFFFF;
+    --border: #E4E2DC;
+    --text: #1C1C1A;
+    --muted: #7A7870;
+    --danger: #C0392B;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+ 
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+ 
+  /* ── Header ── */
+  header {
+    background: var(--black);
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  .logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+  .logo-img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    object-fit: cover;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: #fff;
+    letter-spacing: -0.3px;
+  }
+  header p {
+    color: #9A9890;
+    font-size: 14px;
+    font-weight: 300;
+    margin-top: 4px;
+  }
+ 
+  /* ── Progress bar ── */
+  .progress-wrap {
+    background: var(--black);
+    padding: 0 24px 20px;
+  }
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .step-dot {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .dot {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid #3A3A38;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 500;
+    color: #5A5A58;
+    transition: all 0.3s;
+  }
+  .dot.active { border-color: var(--gold); color: var(--gold); }
+  .dot.done { border-color: var(--gold); background: var(--gold); color: var(--black); }
+  .step-label {
+    font-size: 10px;
+    color: #5A5A58;
+    white-space: nowrap;
+    transition: color 0.3s;
+  }
+  .step-dot.active .step-label { color: var(--gold); }
+  .step-dot.done .step-label { color: #9A9890; }
+  .step-line {
+    flex: 1;
+    height: 1px;
+    background: #3A3A38;
+    margin: 0 4px;
+    margin-bottom: 22px;
+    transition: background 0.3s;
+  }
+  .step-line.done { background: var(--gold); }
+ 
+  /* ── Main container ── */
+  .container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 32px 20px 0;
+  }
+ 
+  /* ── Section card ── */
+  .section-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px 28px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow);
+  }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text);
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--border);
+  }
+ 
+  /* ── Form fields ── */
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+  .field-row.single { grid-template-columns: 1fr; }
+  .field-group {
+    margin-bottom: 16px;
+  }
+  label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  label .req { color: var(--gold-dim); margin-left: 2px; }
+  label .opt { color: var(--muted); font-weight: 300; font-size: 12px; margin-left: 4px; }
+ 
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: #FEFEFE;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(232,160,32,0.12);
+  }
+  input.error, select.error, textarea.error {
+    border-color: var(--danger);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+  select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7870' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  .field-error {
+    font-size: 12px;
+    color: var(--danger);
+    margin-top: 4px;
+    display: none;
+  }
+ 
+  /* ── Yes/No toggles ── */
+  .toggle-group {
+    display: flex;
+    gap: 10px;
+  }
+  .toggle-btn {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #FEFEFE;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.18s;
+    text-align: center;
+  }
+  .toggle-btn:hover { border-color: var(--gold); color: var(--text); }
+  .toggle-btn.selected {
+    border-color: var(--gold);
+    background: rgba(232,160,32,0.08);
+    color: var(--gold-dim);
+    font-weight: 500;
+  }
+  .toggle-btn.error-toggle { border-color: var(--danger); }
+ 
+  /* ── Checkbox ── */
+  .checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    margin-top: 2px;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+ 
+  /* ── Items list ── */
+  .items-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .item-chip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    animation: chipIn 0.2s ease;
+  }
+  @keyframes chipIn {
+    from { opacity: 0; transform: translateY(-6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .item-chip-info strong {
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .item-chip-info span {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    display: block;
+  }
+  .item-chip-actions {
+    display: flex;
+    gap: 6px;
+  }
+  .chip-btn {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--card);
+    color: var(--muted);
+    transition: all 0.15s;
+    font-family: 'DM Sans', sans-serif;
+  }
+  .chip-btn:hover { border-color: #bbb; color: var(--text); }
+  .chip-btn.remove:hover { border-color: var(--danger); color: var(--danger); }
+ 
+  /* ── Add furniture button ── */
+  .add-btn {
+    width: 100%;
+    padding: 13px;
+    border: 1.5px dashed var(--gold);
+    border-radius: 8px;
+    background: rgba(232,160,32,0.04);
+    color: var(--gold-dim);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.18s;
+  }
+  .add-btn:hover {
+    background: rgba(232,160,32,0.1);
+    border-color: var(--gold-dim);
+    color: var(--black);
+  }
+  .add-btn svg { flex-shrink: 0; }
+  .empty-items {
+    text-align: center;
+    padding: 20px 0 8px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+ 
+  /* ── Submit button ── */
+  .submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--black);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    letter-spacing: 0.2px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    margin-top: 8px;
+  }
+  .submit-btn:hover { background: #2A2A28; }
+  .submit-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled { background: #9A9890; cursor: not-allowed; }
+ 
+  /* ── Modal overlay ── */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal {
+    background: var(--card);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.22);
+    transform: translateY(12px);
+    transition: transform 0.22s;
+  }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    background: var(--card);
+    border-radius: 16px 16px 0 0;
+    z-index: 1;
+  }
+  .modal-header h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--text);
+  }
+  .modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: transparent;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1;
+    transition: all 0.15s;
+  }
+  .modal-close:hover { background: var(--surface); color: var(--text); }
+  .modal-body { padding: 22px 24px; }
+  .modal-footer {
+    padding: 16px 24px 22px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  .modal-cancel {
+    flex: 1;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .modal-cancel:hover { border-color: #bbb; color: var(--text); }
+  .modal-save {
+    flex: 2;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--gold);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--black);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .modal-save:hover { background: var(--gold-light); }
+ 
+  /* ── File upload ── */
+  .file-upload-area {
+    border: 1.5px dashed var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+  }
+  .file-upload-area:hover { border-color: var(--gold); background: rgba(232,160,32,0.04); }
+  .file-upload-area input[type="file"] {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+  }
+  .file-upload-icon { font-size: 24px; margin-bottom: 6px; }
+  .file-upload-text { font-size: 13px; color: var(--muted); }
+  .file-upload-text strong { color: var(--gold-dim); }
+  .file-preview {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    background: var(--surface);
+    border-radius: 6px;
+    font-size: 13px;
+    color: var(--text);
+  }
+  .file-preview-img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 4px;
+    display: none;
+  }
+  .file-preview-name { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-remove {
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    background: none;
+    border: none;
+    padding: 0 2px;
+  }
+ 
+  /* ── Success screen ── */
+  .success-screen {
+    display: none;
+    text-align: center;
+    padding: 60px 24px;
+  }
+  .success-icon {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(232,160,32,0.12);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  .success-icon svg { color: var(--gold); }
+  .success-screen h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    margin-bottom: 10px;
+  }
+  .success-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+ 
+  /* ── Spinner ── */
+  .spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+ 
+  @media (max-width: 480px) {
+    .field-row { grid-template-columns: 1fr; }
+    .section-card { padding: 20px 16px; }
+    .modal-body, .modal-footer { padding-left: 16px; padding-right: 16px; }
+  }
+</style>
+</head>
+<body>
+ 
+<header>
+  <div class="logo-wrap">
+    <img src="https://i.imgur.com/placeholder.png" alt="Share logo" class="logo-img" id="logoImg"
+      onerror="this.style.display='none'">
+    <h1>Share Furniture</h1>
+  </div>
+  <p>Donate furniture to families in need across Arlington</p>
+</header>
+ 
+<div class="progress-wrap">
+  <div class="progress-steps">
+    <div class="step-dot active" id="step1dot">
+      <div class="dot active" id="dot1">1</div>
+      <span class="step-label">Your info</span>
+    </div>
+    <div class="step-line" id="line1"></div>
+    <div class="step-dot" id="step2dot">
+      <div class="dot" id="dot2">2</div>
+      <span class="step-label">Items</span>
+    </div>
+    <div class="step-line" id="line2"></div>
+    <div class="step-dot" id="step3dot">
+      <div class="dot" id="dot3">3</div>
+      <span class="step-label">Review</span>
+    </div>
+  </div>
+</div>
+ 
+<div class="container" id="mainForm">
+ 
+  <!-- Step 1: Donor Info -->
+  <div id="step1">
+    <div class="section-card">
+      <div class="section-title">Contact Information</div>
+ 
+      <div class="field-row">
+        <div class="field-group">
+          <label>First Name <span class="req">*</span></label>
+          <input type="text" id="firstName" placeholder="Jane">
+          <div class="field-error" id="err-firstName">Required</div>
+        </div>
+        <div class="field-group">
+          <label>Last Name <span class="req">*</span></label>
+          <input type="text" id="lastName" placeholder="Smith">
+          <div class="field-error" id="err-lastName">Required</div>
+        </div>
+      </div>
+ 
+      <div class="field-row">
+        <div class="field-group">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="email" placeholder="jane@email.com">
+          <div class="field-error" id="err-email">Valid email required</div>
+        </div>
+        <div class="field-group">
+          <label>Phone Number <span class="req">*</span></label>
+          <input type="tel" id="phone" placeholder="703-555-0100">
+          <div class="field-error" id="err-phone">Required</div>
+        </div>
+      </div>
+ 
+      <div class="field-row">
+        <div class="field-group">
+          <label>Street Address <span class="req">*</span></label>
+          <input type="text" id="street" placeholder="1234 Main St">
+          <div class="field-error" id="err-street">Required</div>
+        </div>
+        <div class="field-group">
+          <label>Apt / Unit <span class="opt">(optional)</span></label>
+          <input type="text" id="apt" placeholder="Apt 2B">
+        </div>
+      </div>
+ 
+      <div class="field-row">
+        <div class="field-group">
+          <label>City <span class="req">*</span></label>
+          <input type="text" id="city" placeholder="Arlington">
+          <div class="field-error" id="err-city">Required</div>
+        </div>
+        <div class="field-group">
+          <label>Zip Code <span class="req">*</span></label>
+          <input type="text" id="zip" placeholder="22201">
+          <div class="field-error" id="err-zip">Required</div>
+        </div>
+      </div>
+ 
+      <div class="field-group">
+        <label>Willing to deliver to a client in Arlington? <span class="req">*</span></label>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" data-field="deliverArlington" data-val="Yes">Yes</button>
+          <button type="button" class="toggle-btn" data-field="deliverArlington" data-val="No">No</button>
+        </div>
+        <div class="field-error" id="err-deliverArlington">Please select one</div>
+      </div>
+ 
+      <div class="field-group">
+        <label>Pet and smoke-free environment? <span class="req">*</span></label>
+        <div class="toggle-group">
+          <button type="button" class="toggle-btn" data-field="petSmokeFree" data-val="Yes">Yes</button>
+          <button type="button" class="toggle-btn" data-field="petSmokeFree" data-val="No">No</button>
+        </div>
+        <div class="field-error" id="err-petSmokeFree">Please select one</div>
+      </div>
+ 
+      <div class="field-group">
+        <label>Notes <span class="opt">(optional)</span></label>
+        <textarea id="notes" placeholder="Anything helpful for our pickup team..."></textarea>
+      </div>
+ 
+      <div class="field-group">
+        <label class="checkbox-label">
+          <input type="checkbox" id="terms">
+          I understand and agree to Share's donation terms and conditions.
+        </label>
+        <div class="field-error" id="err-terms">You must agree to continue</div>
+      </div>
+    </div>
+ 
+    <button class="submit-btn" onclick="goToStep2()">Continue to Items →</button>
+  </div>
+ 
+  <!-- Step 2: Items -->
+  <div id="step2" style="display:none;">
+    <div class="section-card">
+      <div class="section-title">Furniture Items</div>
+ 
+      <div id="itemsList" class="items-list">
+        <div class="empty-items" id="emptyMsg">No items added yet. Click below to add your first item.</div>
+      </div>
+ 
+      <button class="add-btn" onclick="openModal()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
+        Add Furniture Item
+      </button>
+      <div class="field-error" id="err-items" style="display:none; margin-top:10px;">Please add at least one item</div>
+    </div>
+ 
+    <div style="display:flex; gap:12px;">
+      <button class="submit-btn" style="background:#EEECEA; color:var(--text); flex:1;" onclick="goToStep1()">← Back</button>
+      <button class="submit-btn" style="flex:2;" onclick="goToStep3()">Review Submission →</button>
+    </div>
+  </div>
+ 
+  <!-- Step 3: Review -->
+  <div id="step3" style="display:none;">
+    <div class="section-card">
+      <div class="section-title">Review Your Submission</div>
+      <div id="reviewContent"></div>
+    </div>
+    <div style="display:flex; gap:12px;">
+      <button class="submit-btn" style="background:#EEECEA; color:var(--text); flex:1;" onclick="goToStep2()">← Edit Items</button>
+      <button class="submit-btn" style="flex:2;" id="submitBtn" onclick="submitForm()">Submit Donation</button>
+    </div>
+  </div>
+ 
+</div>
+ 
+<!-- Success screen -->
+<div class="container" id="successScreen" style="display:none;">
+  <div class="success-screen" style="display:block;">
+    <div class="success-icon">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <path d="M6 16l7 7 13-13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <h2>Thank you for donating!</h2>
+    <p>We've received your submission and sent a confirmation to your email.<br>Our team will be in touch soon to schedule a pickup.</p>
+  </div>
+</div>
+ 
+<!-- Add Item Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Add Furniture Item</h2>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+ 
+      <div class="field-group">
+        <label>Furniture Type <span class="req">*</span></label>
+        <select id="modalType">
+          <option value="">Select a type...</option>
+          <option>Armchair/Recliner (non-power)</option>
+          <option>Bedframe (Please describe size and style)</option>
+          <option>Chest of Drawers</option>
+          <option>Coffee Table (no glass)</option>
+          <option>Computer Desk</option>
+          <option>Dining Chairs</option>
+          <option>Dining Table (seats 1-4)</option>
+          <option>Dresser (under 72")</option>
+          <option>End Table</option>
+          <option>Full Size Box Springs</option>
+          <option>Full Size Mattress</option>
+          <option>Loveseat</option>
+          <option>Nightstand</option>
+          <option>Other (Please describe and upload photo)</option>
+          <option>Queen Box Springs</option>
+          <option>Queen Mattress</option>
+          <option>Sofa</option>
+          <option>TV Stand (small)</option>
+          <option>Table or Floor Lamp</option>
+          <option>Twin Box Springs (not XL)</option>
+          <option>Twin Mattress (not XL)</option>
+        </select>
+        <div class="field-error" id="err-modalType">Please select a furniture type</div>
+      </div>
+ 
+      <div class="field-group">
+        <label>Quantity <span class="req">*</span></label>
+        <input type="text" id="modalQty" placeholder="e.g. 1">
+        <div class="field-error" id="err-modalQty">Please enter a quantity</div>
+      </div>
+ 
+      <div class="field-group">
+        <label>Description <span class="opt">(optional)</span></label>
+        <textarea id="modalDesc" placeholder="Condition, dimensions, color, any damage..."></textarea>
+      </div>
+ 
+      <div class="field-group">
+        <label>Photo <span class="opt">(optional)</span></label>
+        <div class="file-upload-area" id="fileUploadArea">
+          <input type="file" id="modalPhoto" accept="image/*" onchange="handleFileSelect(this)">
+          <div class="file-upload-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v12" stroke="#9A9890" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="file-upload-text"><strong>Click to upload</strong> or drag and drop</div>
+          <div class="file-upload-text" style="margin-top:4px;">JPG, PNG up to 10MB</div>
+        </div>
+        <div class="file-preview" id="filePreview" style="display:none;">
+          <img class="file-preview-img" id="filePreviewImg">
+          <span class="file-preview-name" id="filePreviewName"></span>
+          <button class="file-remove" onclick="removeFile()">×</button>
+        </div>
+      </div>
+ 
+    </div>
+    <div class="modal-footer">
+      <button class="modal-cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-save" onclick="saveItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+ 
+<script>
+  // ── Replace with your deployed Apps Script Web App URL ──
+  var SCRIPT_URL = 'https://script.google.com/a/macros/shareofmclean.org/s/AKfycbxiwatuecFZBSk04zAKVg1eljGhfARvGGu0HbpPIVutnn5b84HZiItPQg_NhjduMXsgIA/exec';
+ 
+  var items = [];
+  var editingIndex = null;
+  var toggleValues = { deliverArlington: null, petSmokeFree: null };
+  var currentPhotoFile = null;
+  var currentPhotoDataUrl = null;
+ 
+  // ── Logo: embed the uploaded logo as base64 ──
+  // Replace the src of #logoImg with a base64 data URI or hosted URL of the Share logo
+  // e.g. document.getElementById('logoImg').src = 'data:image/png;base64,...';
+ 
+  // ── Toggle buttons ──
+  document.querySelectorAll('.toggle-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var field = this.dataset.field;
+      var val = this.dataset.val;
+      toggleValues[field] = val;
+      document.querySelectorAll('[data-field="' + field + '"]').forEach(function(b) {
+        b.classList.remove('selected', 'error-toggle');
+      });
+      this.classList.add('selected');
+      document.getElementById('err-' + field).style.display = 'none';
+    });
+  });
+ 
+  // ── Step navigation ──
+  function setStep(n) {
+    [1,2,3].forEach(function(i) {
+      document.getElementById('step' + i).style.display = i === n ? 'block' : 'none';
+      var dot = document.getElementById('dot' + i);
+      var stepDot = document.getElementById('step' + i + 'dot');
+      dot.classList.remove('active','done');
+      stepDot.classList.remove('active','done');
+      if (i < n) { dot.classList.add('done'); stepDot.classList.add('done'); dot.textContent = '✓'; }
+      else if (i === n) { dot.classList.add('active'); stepDot.classList.add('active'); dot.textContent = i; }
+      else { dot.textContent = i; }
+    });
+    [1,2].forEach(function(i) {
+      var line = document.getElementById('line' + i);
+      line.classList.toggle('done', i < n);
+    });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+ 
+  function goToStep2() {
+    if (!validateStep1()) return;
+    setStep(2);
+  }
+  function goToStep1() { setStep(1); }
+  function goToStep3() {
+    if (items.length === 0) {
+      document.getElementById('err-items').style.display = 'block';
+      return;
+    }
+    document.getElementById('err-items').style.display = 'none';
+    buildReview();
+    setStep(3);
+  }
+  function goToStep2FromReview() { setStep(2); }
+ 
+  // ── Validation ──
+  function validateStep1() {
+    var ok = true;
+    var required = ['firstName','lastName','email','phone','street','city','zip'];
+    required.forEach(function(id) {
+      var el = document.getElementById(id);
+      var err = document.getElementById('err-' + id);
+      if (!el.value.trim()) {
+        el.classList.add('error'); err.style.display = 'block'; ok = false;
+      } else {
+        el.classList.remove('error'); err.style.display = 'none';
+      }
+    });
+    // email format
+    var email = document.getElementById('email');
+    if (email.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value)) {
+      email.classList.add('error');
+      document.getElementById('err-email').style.display = 'block'; ok = false;
+    }
+    ['deliverArlington','petSmokeFree'].forEach(function(field) {
+      var err = document.getElementById('err-' + field);
+      if (!toggleValues[field]) {
+        document.querySelectorAll('[data-field="' + field + '"]').forEach(function(b) { b.classList.add('error-toggle'); });
+        err.style.display = 'block'; ok = false;
+      } else { err.style.display = 'none'; }
+    });
+    if (!document.getElementById('terms').checked) {
+      document.getElementById('err-terms').style.display = 'block'; ok = false;
+    } else { document.getElementById('err-terms').style.display = 'none'; }
+    return ok;
+  }
+ 
+  // ── Modal ──
+  function openModal(editIdx) {
+    editingIndex = editIdx !== undefined ? editIdx : null;
+    document.getElementById('modalTitle').textContent = editIdx !== undefined ? 'Edit Item' : 'Add Furniture Item';
+    if (editIdx !== undefined) {
+      var item = items[editIdx];
+      document.getElementById('modalType').value = item.type;
+      document.getElementById('modalQty').value = item.qty;
+      document.getElementById('modalDesc').value = item.desc || '';
+      currentPhotoFile = item.photoFile || null;
+      currentPhotoDataUrl = item.photoDataUrl || null;
+      if (currentPhotoDataUrl) showFilePreview(item.photoName, currentPhotoDataUrl);
+      else hideFilePreview();
+    } else {
+      document.getElementById('modalType').value = '';
+      document.getElementById('modalQty').value = '';
+      document.getElementById('modalDesc').value = '';
+      document.getElementById('modalPhoto').value = '';
+      currentPhotoFile = null; currentPhotoDataUrl = null;
+      hideFilePreview();
+    }
+    ['modalType','modalQty'].forEach(function(id) {
+      document.getElementById(id).classList.remove('error');
+      document.getElementById('err-' + id).style.display = 'none';
+    });
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+ 
+  function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+    editingIndex = null;
+  }
+ 
+  document.getElementById('modalOverlay').addEventListener('click', function(e) {
+    if (e.target === this) closeModal();
+  });
+ 
+  function saveItem() {
+    var type = document.getElementById('modalType').value;
+    var qty  = document.getElementById('modalQty').value.trim();
+    var ok   = true;
+    if (!type) {
+      document.getElementById('modalType').classList.add('error');
+      document.getElementById('err-modalType').style.display = 'block'; ok = false;
+    } else {
+      document.getElementById('modalType').classList.remove('error');
+      document.getElementById('err-modalType').style.display = 'none';
+    }
+    if (!qty) {
+      document.getElementById('modalQty').classList.add('error');
+      document.getElementById('err-modalQty').style.display = 'block'; ok = false;
+    } else {
+      document.getElementById('modalQty').classList.remove('error');
+      document.getElementById('err-modalQty').style.display = 'none';
+    }
+    if (!ok) return;
+ 
+    var item = {
+      type: type,
+      qty: qty,
+      desc: document.getElementById('modalDesc').value.trim(),
+      photoFile: currentPhotoFile,
+      photoDataUrl: currentPhotoDataUrl,
+      photoName: currentPhotoFile ? currentPhotoFile.name : null
+    };
+ 
+    if (editingIndex !== null) {
+      items[editingIndex] = item;
+    } else {
+      items.push(item);
+    }
+    renderItems();
+    closeModal();
+  }
+ 
+  function removeItem(idx) {
+    items.splice(idx, 1);
+    renderItems();
+  }
+ 
+  function renderItems() {
+    var list = document.getElementById('itemsList');
+    var empty = document.getElementById('emptyMsg');
+    list.innerHTML = '';
+    if (items.length === 0) {
+      list.appendChild(empty);
+      empty.style.display = 'block';
+      return;
+    }
+    items.forEach(function(item, i) {
+      var chip = document.createElement('div');
+      chip.className = 'item-chip';
+      chip.innerHTML =
+        '<div class="item-chip-info">' +
+          '<strong>' + escHtml(item.type) + '</strong>' +
+          '<span>Qty: ' + escHtml(item.qty) + (item.desc ? ' · ' + escHtml(item.desc.substring(0,60)) + (item.desc.length > 60 ? '…' : '') : '') + '</span>' +
+        '</div>' +
+        '<div class="item-chip-actions">' +
+          '<button class="chip-btn" onclick="openModal(' + i + ')">Edit</button>' +
+          '<button class="chip-btn remove" onclick="removeItem(' + i + ')">Remove</button>' +
+        '</div>';
+      list.appendChild(chip);
+    });
+  }
+ 
+  // ── File handling ──
+  function handleFileSelect(input) {
+    var file = input.files[0];
+    if (!file) return;
+    currentPhotoFile = file;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      currentPhotoDataUrl = e.target.result;
+      showFilePreview(file.name, e.target.result);
+    };
+    reader.readAsDataURL(file);
+  }
+ 
+  function showFilePreview(name, dataUrl) {
+    document.getElementById('fileUploadArea').style.display = 'none';
+    var preview = document.getElementById('filePreview');
+    preview.style.display = 'flex';
+    document.getElementById('filePreviewName').textContent = name;
+    var img = document.getElementById('filePreviewImg');
+    img.src = dataUrl;
+    img.style.display = 'block';
+  }
+ 
+  function hideFilePreview() {
+    document.getElementById('fileUploadArea').style.display = 'block';
+    document.getElementById('filePreview').style.display = 'none';
+    document.getElementById('filePreviewImg').style.display = 'none';
+    document.getElementById('modalPhoto').value = '';
+  }
+ 
+  function removeFile() {
+    currentPhotoFile = null; currentPhotoDataUrl = null;
+    hideFilePreview();
+  }
+ 
+  // ── Review ──
+  function buildReview() {
+    var d = document.getElementById('reviewContent');
+    var donorAddress = document.getElementById('street').value.trim() +
+      (document.getElementById('apt').value.trim() ? ' ' + document.getElementById('apt').value.trim() : '') +
+      ', ' + document.getElementById('city').value.trim() + ' ' + document.getElementById('zip').value.trim();
+ 
+    var html = '<div style="margin-bottom:18px;">' +
+      '<div style="font-size:12px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:10px;font-weight:500;">Donor</div>' +
+      reviewRow('Name', document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value) +
+      reviewRow('Email', document.getElementById('email').value) +
+      reviewRow('Phone', document.getElementById('phone').value) +
+      reviewRow('Address', donorAddress) +
+      reviewRow('Deliver to Arlington?', toggleValues.deliverArlington) +
+      reviewRow('Pet & smoke-free?', toggleValues.petSmokeFree) +
+      (document.getElementById('notes').value ? reviewRow('Notes', document.getElementById('notes').value) : '') +
+      '</div>';
+ 
+    html += '<div style="font-size:12px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:10px;font-weight:500;">' + items.length + ' Item' + (items.length > 1 ? 's' : '') + '</div>';
+    items.forEach(function(item, i) {
+      html += '<div style="padding:12px 0;border-top:1px solid var(--border);">' +
+        '<div style="font-weight:500;font-size:14px;margin-bottom:4px;">' + (i+1) + '. ' + escHtml(item.type) + '</div>' +
+        '<div style="font-size:13px;color:var(--muted);">Qty: ' + escHtml(item.qty) +
+        (item.desc ? ' · ' + escHtml(item.desc) : '') +
+        (item.photoName ? ' · Photo: ' + escHtml(item.photoName) : '') + '</div></div>';
+    });
+    d.innerHTML = html;
+  }
+ 
+  function reviewRow(label, value) {
+    return '<div style="display:flex;justify-content:space-between;padding:7px 0;border-top:1px solid var(--border);font-size:14px;">' +
+      '<span style="color:var(--muted);">' + label + '</span>' +
+      '<span style="font-weight:500;text-align:right;max-width:60%;">' + escHtml(value || '') + '</span></div>';
+  }
+ 
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+ 
+  // ── Submit ──
+  function submitForm() {
+    var btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Submitting...';
+ 
+    var donorData = {
+      firstName:        document.getElementById('firstName').value.trim(),
+      lastName:         document.getElementById('lastName').value.trim(),
+      email:            document.getElementById('email').value.trim(),
+      phone:            document.getElementById('phone').value.trim(),
+      street:           document.getElementById('street').value.trim(),
+      apt:              document.getElementById('apt').value.trim(),
+      city:             document.getElementById('city').value.trim(),
+      zip:              document.getElementById('zip').value.trim(),
+      deliverArlington: toggleValues.deliverArlington,
+      petSmokeFree:     toggleValues.petSmokeFree,
+      notes:            document.getElementById('notes').value.trim(),
+      terms:            'I Understand'
+    };
+ 
+    var itemsData = items.map(function(item) {
+      return {
+        type:      item.type,
+        qty:       item.qty,
+        desc:      item.desc || '',
+        photoName: item.photoName || '',
+        photoData: item.photoDataUrl || ''
+      };
+    });
+ 
+    var payload = { donor: donorData, items: itemsData };
+ 
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      body: JSON.stringify(payload)
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (data.status === 'ok') {
+        document.getElementById('mainForm').style.display = 'none';
+        document.getElementById('successScreen').style.display = 'block';
+      } else {
+        alert('Something went wrong: ' + (data.message || 'unknown error'));
+        btn.disabled = false;
+        btn.innerHTML = 'Submit Donation';
+      }
+    })
+    .catch(function(err) {
+      alert('Submission failed. Please check your connection and try again.');
+      btn.disabled = false;
+      btn.innerHTML = 'Submit Donation';
+    });
+  }
+</script>
+</body>
+</html>
