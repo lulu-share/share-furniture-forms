@@ -999,16 +999,48 @@
  
   // ── File handling ──
   function handleFileSelect(input) {
-    var file = input.files[0];
-    if (!file) return;
+     var file = input.files[0];
+  if (!file) return;
+
+  resizeImage(file, 1400, 0.75, function(resizedDataUrl) {
     currentPhotoFile = file;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      currentPhotoDataUrl = e.target.result;
-      showFilePreview(file.name, e.target.result);
-    };
-    reader.readAsDataURL(file);
+    currentPhotoDataUrl = resizedDataUrl;
+    showFilePreview(file.name, resizedDataUrl);
+  });
   }
+
+ function resizeImage(file, maxWidth, quality, callback) {
+  var reader = new FileReader();
+
+  reader.onload = function(e) {
+    var img = new Image();
+
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+
+      var width = img.width;
+      var height = img.height;
+
+      if (width > maxWidth) {
+        height = Math.round(height * (maxWidth / width));
+        width = maxWidth;
+      }
+
+      canvas.width = width;
+      canvas.height = height;
+
+      var ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+
+      var resizedDataUrl = canvas.toDataURL('image/jpeg', quality);
+      callback(resizedDataUrl);
+    };
+
+    img.src = e.target.result;
+  };
+
+  reader.readAsDataURL(file);
+}
  
   function showFilePreview(name, dataUrl) {
     document.getElementById('fileUploadArea').style.display = 'none';
