@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Share Furniture Forms</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #E8A020;
+      --black: #111110;
+      --surface: #FAFAF8;
+      --card: #FFFFFF;
+      --border: #E4E2DC;
+      --text: #1C1C1A;
+      --muted: #7A7870;
+      --radius: 14px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: 'DM Sans', sans-serif;
+      background: var(--surface);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--black);
+      color: white;
+      text-align: center;
+      padding: 36px 20px 30px;
+    }
+
+    header h1 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 34px;
+      margin: 0 0 8px;
+    }
+
+    header p {
+      color: #9A9890;
+      margin: 0;
+      font-size: 15px;
+    }
+
+    main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 42px 20px;
+    }
+
+    .intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .intro h2 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .intro p {
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      text-decoration: none;
+      color: var(--text);
+      box-shadow: 0 2px 16px rgba(0,0,0,0.07);
+      transition: transform 0.15s, border-color 0.15s;
+    }
+
+    .card:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold);
+    }
+
+    .card h3 {
+      font-family: 'DM Serif Display', serif;
+      font-size: 24px;
+      margin: 0 0 8px;
+    }
+
+    .card p {
+      color: var(--muted);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+
+    .button {
+      display: inline-block;
+      background: var(--black);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    .card:hover .button {
+      background: var(--gold);
+      color: var(--black);
+    }
+
+    @media (max-width: 640px) {
+      .cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Share Furniture</h1>
+    <p>Furniture donation and client intake forms</p>
+  </header>
+
+  <main>
+    <section class="intro">
+      <h2>Choose a form</h2>
+      <p>Please select whether you are donating furniture or requesting furniture assistance for a client.</p>
+    </section>
+
+    <section class="cards">
+      <a class="card" href="donor.html">
+        <h3>Donate Furniture</h3>
+        <p>Use this form to submit furniture items you would like to donate.</p>
+        <span class="button">Open Donor Form</span>
+      </a>
+
+      <a class="card" href="client.html">
+        <h3>Request Furniture</h3>
+        <p>Social workers can use this form to request furniture assistance for a client.</p>
+        <span class="button">Open Client Form</span>
+      </a>
+    </section>
+  </main>
+</body>
+</html>
