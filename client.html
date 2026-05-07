@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Share Furniture — Request Furniture Assistance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #E8A020;
+    --gold-light: #F5C842;
+    --gold-dim: #B87D18;
+    --black: #111110;
+    --surface: #FAFAF8;
+    --card: #FFFFFF;
+    --border: #E4E2DC;
+    --text: #1C1C1A;
+    --muted: #7A7870;
+    --danger: #C0392B;
+    --radius: 12px;
+    --shadow: 0 2px 16px rgba(0,0,0,0.07);
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 400;
+    background: var(--surface);
+    color: var(--text);
+    min-height: 100vh;
+    padding-bottom: 80px;
+  }
+  header {
+    background: var(--black);
+    padding: 28px 24px 24px;
+    text-align: center;
+  }
+  .logo-wrap { display: flex; align-items: center; justify-content: center; gap: 14px; margin-bottom: 6px; }
+  .logo-img { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; }
+  header h1 { font-family: 'DM Serif Display', serif; font-size: 26px; color: #fff; letter-spacing: -0.3px; }
+  header p { color: #9A9890; font-size: 14px; font-weight: 300; margin-top: 4px; }
+  .progress-wrap { background: var(--black); padding: 0 20px 28px; }
+  .progress-steps { display: flex; align-items: flex-start; justify-content: center; max-width: 880px; margin: 0 auto; }
+  .step-node { display: flex; flex-direction: column; align-items: center; min-width: 92px; gap: 10px; color: #5A5A58; background: transparent; border: 0; font-family: 'DM Sans', sans-serif; cursor: pointer; }
+  .step-circle { width: 44px; height: 44px; border-radius: 50%; border: 3px solid #3A3A38; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 16px; color: #5A5A58; transition: all 0.22s; }
+  .step-label { font-size: 13px; color: #6F6D66; white-space: nowrap; transition: color 0.22s; }
+  .step-node.active .step-circle { border-color: var(--gold); color: var(--gold); }
+  .step-node.active .step-label { color: var(--gold); font-weight: 600; }
+  .step-node.done .step-circle { border-color: var(--gold); background: var(--gold); color: var(--black); }
+  .step-node.done .step-label { color: #9A9890; }
+  .step-line { flex: 1; height: 2px; background: #3A3A38; margin-top: 21px; max-width: 170px; transition: background 0.22s; }
+  .step-line.done { background: var(--gold); }
+  .container { max-width: 720px; margin: 0 auto; padding: 32px 20px 0; }
+  .section-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 28px; margin-bottom: 20px; box-shadow: var(--shadow); }
+  .section-title { font-family: 'DM Serif Display', serif; font-size: 20px; color: var(--text); margin-bottom: 8px; }
+  .section-subtitle { color: var(--muted); font-size: 14px; line-height: 1.5; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .field-row.single { grid-template-columns: 1fr; }
+  .field-group { margin-bottom: 16px; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  label .req { color: var(--gold-dim); margin-left: 2px; }
+  label .opt { color: var(--muted); font-weight: 300; font-size: 12px; margin-left: 4px; }
+  input[type="text"], input[type="email"], input[type="tel"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%; padding: 10px 14px; border: 1px solid var(--border); border-radius: 8px; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--text); background: #FEFEFE; outline: none; transition: border-color 0.2s, box-shadow 0.2s; appearance: none; -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(232,160,32,0.12); }
+  input.error, select.error, textarea.error { border-color: var(--danger); }
+  textarea { resize: vertical; min-height: 80px; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A7870' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; cursor: pointer; }
+  .field-error { font-size: 12px; color: var(--danger); margin-top: 4px; display: none; }
+  .toggle-group { display: flex; gap: 10px; }
+  .toggle-btn { flex: 1; padding: 11px; border: 1px solid var(--border); border-radius: 8px; background: #FEFEFE; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted); cursor: pointer; transition: all 0.18s; text-align: center; }
+  .toggle-btn:hover { border-color: var(--gold); color: var(--text); }
+  .toggle-btn.selected { border-color: var(--gold); background: rgba(232,160,32,0.08); color: var(--gold-dim); font-weight: 500; }
+  .toggle-btn.error-toggle { border-color: var(--danger); }
+  .help { color: var(--muted); font-size: 12px; margin-top: 4px; line-height: 1.45; }
+  .form-step { display: none; }
+  .form-step.active { display: block; }
+  .actions { display: flex; gap: 12px; margin-top: 12px; }
+  .submit-btn, .secondary-btn { width: 100%; padding: 15px; border: none; border-radius: var(--radius); font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.2px; cursor: pointer; transition: background 0.2s, transform 0.1s; }
+  .submit-btn { background: var(--black); color: #fff; }
+  .submit-btn:hover { background: #2A2A28; }
+  .submit-btn:active, .secondary-btn:active { transform: scale(0.99); }
+  .submit-btn:disabled { background: #9A9890; cursor: not-allowed; }
+  .secondary-btn { background: #EEECEA; color: var(--text); }
+  .items-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+  .empty-items { text-align: center; padding: 20px 0 8px; color: var(--muted); font-size: 14px; }
+  .item-chip { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; }
+  .item-chip-info strong { display: block; font-size: 14px; font-weight: 500; color: var(--text); }
+  .item-chip-info span { font-size: 12px; color: var(--muted); margin-top: 2px; display: block; }
+  .item-chip-actions { display: flex; gap: 6px; }
+  .chip-btn { padding: 5px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; cursor: pointer; border: 1px solid var(--border); background: var(--card); color: var(--muted); transition: all 0.15s; font-family: 'DM Sans', sans-serif; }
+  .chip-btn:hover { border-color: #bbb; color: var(--text); }
+  .chip-btn.remove:hover { border-color: var(--danger); color: var(--danger); }
+  .add-btn { width: 100%; padding: 13px; border: 1.5px dashed var(--gold); border-radius: 8px; background: rgba(232,160,32,0.04); color: var(--gold-dim); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.18s; }
+  .add-btn:hover { background: rgba(232,160,32,0.1); border-color: var(--gold-dim); color: var(--black); }
+  .review-block { border-top: 1px solid var(--border); padding: 14px 0; }
+  .review-block:first-child { border-top: 0; padding-top: 0; }
+  .review-heading { font-size: 12px; text-transform: uppercase; letter-spacing: 0.8px; color: var(--muted); margin-bottom: 10px; font-weight: 500; }
+  .review-row { display:flex; justify-content:space-between; gap: 18px; padding:7px 0; border-top:1px solid var(--border); font-size:14px; }
+  .review-row:first-of-type { border-top: 0; }
+  .review-row span:first-child { color: var(--muted); }
+  .review-row span:last-child { font-weight: 500; text-align: right; max-width: 62%; }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+  .modal { background: var(--card); border-radius: 16px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; box-shadow: 0 24px 60px rgba(0,0,0,0.22); transform: translateY(12px); transition: transform 0.22s; }
+  .modal-overlay.open .modal { transform: translateY(0); }
+  .modal-header { display: flex; align-items: center; justify-content: space-between; padding: 22px 24px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; background: var(--card); border-radius: 16px 16px 0 0; z-index: 1; }
+  .modal-header h2 { font-family: 'DM Serif Display', serif; font-size: 18px; color: var(--text); }
+  .modal-close { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); background: transparent; cursor: pointer; color: var(--muted); font-size: 18px; line-height: 1; }
+  .modal-close:hover { background: var(--surface); color: var(--text); }
+  .modal-body { padding: 22px 24px; }
+  .modal-footer { padding: 16px 24px 22px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+  .modal-cancel { flex: 1; padding: 12px; border: 1px solid var(--border); border-radius: 8px; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--muted); cursor: pointer; }
+  .modal-save { flex: 2; padding: 12px; border: none; border-radius: 8px; background: var(--gold); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; color: var(--black); cursor: pointer; }
+  .modal-save:hover { background: var(--gold-light); }
+  .success-screen { display: none; text-align: center; padding: 60px 24px; }
+  .success-icon { width: 72px; height: 72px; border-radius: 50%; background: rgba(232,160,32,0.12); display: flex; align-items: center; justify-content: center; margin: 0 auto 20px; }
+  .success-icon svg { color: var(--gold); }
+  .success-screen h2 { font-family: 'DM Serif Display', serif; font-size: 26px; margin-bottom: 10px; }
+  .success-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+  .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @media (max-width: 640px) { .field-row { grid-template-columns: 1fr; } .section-card { padding: 20px 16px; } .progress-steps { max-width: 100%; } .step-node { min-width: 58px; } .step-circle { width: 34px; height: 34px; font-size: 13px; } .step-label { font-size: 10px; } .step-line { margin-top: 16px; min-width: 10px; } .actions { flex-direction: column-reverse; } .modal-body, .modal-footer { padding-left: 16px; padding-right: 16px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo-wrap">
+    <img src="https://lulu-share.github.io/share-donation-form/share-logo.png" alt="Share logo" class="logo-img" id="logoImg" onerror="this.style.display='none'">
+    <h1>Share Furniture</h1>
+  </div>
+  <p>Request Furniture Assistance</p>
+</header>
+<div class="progress-wrap">
+  <nav class="progress-steps" aria-label="Form progress">
+    <button type="button" class="step-node active" data-tab="0" onclick="attemptTab(0)"><span class="step-circle">1</span><span class="step-label">Client</span></button>
+    <div class="step-line" data-line="0"></div>
+    <button type="button" class="step-node" data-tab="1" onclick="attemptTab(1)"><span class="step-circle">2</span><span class="step-label">Household</span></button>
+    <div class="step-line" data-line="1"></div>
+    <button type="button" class="step-node" data-tab="2" onclick="attemptTab(2)"><span class="step-circle">3</span><span class="step-label">Social Worker</span></button>
+    <div class="step-line" data-line="2"></div>
+    <button type="button" class="step-node" data-tab="3" onclick="attemptTab(3)"><span class="step-circle">4</span><span class="step-label">Requests</span></button>
+    <div class="step-line" data-line="3"></div>
+    <button type="button" class="step-node" data-tab="4" onclick="attemptTab(4)"><span class="step-circle">5</span><span class="step-label">Review</span></button>
+  </nav>
+</div>
+<div class="container" id="mainForm">
+  <form id="requestForm" novalidate>
+    <section class="form-step active" data-step="0">
+      <div class="section-card">
+        <div class="section-title">Client</div>
+        <p class="section-subtitle">Please fill out each tab shown above. This form is intended for social workers submitting on behalf of a client.</p>
+        <div class="field-row single">
+          <div class="field-group" data-required><label for="dateSubmitted">Date Submitted <span class="req">*</span></label><input id="dateSubmitted" name="dateSubmitted" type="date" required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="clientFirstName">Client First Name <span class="req">*</span></label><input id="clientFirstName" name="clientFirstName" type="text" required><div class="field-error">Required</div></div>
+          <div class="field-group" data-required><label for="clientLastName">Client Last Name <span class="req">*</span></label><input id="clientLastName" name="clientLastName" type="text" required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group"><label for="clientEmail">Client Email <span class="opt">(optional)</span></label><input id="clientEmail" name="clientEmail" type="email"><div class="field-error">Valid email required</div></div>
+          <div class="field-group" data-required><label for="clientPhone">Client Phone <span class="req">*</span></label><input id="clientPhone" name="clientPhone" type="tel" required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field-group" data-required><label for="clientLanguage">Client Language <span class="req">*</span></label><input id="clientLanguage" name="clientLanguage" type="text" placeholder="English, Spanish, etc." required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field-group" data-toggle-required><label>Can your client pick up items from our storage unit? <span class="req">*</span></label><div class="toggle-group"><button type="button" class="toggle-btn" data-field="canPickup" data-val="Unchecked">No</button><button type="button" class="toggle-btn" data-field="canPickup" data-val="Checked">Yes</button></div><div class="help">This does not change required delivery fields.</div><div class="field-error">Please select one</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field-group" data-toggle-required><label>Is your client elderly or disabled? <span class="req">*</span></label><div class="toggle-group"><button type="button" class="toggle-btn" data-field="elderlyDisabled" data-val="Unchecked">No</button><button type="button" class="toggle-btn" data-field="elderlyDisabled" data-val="Checked">Yes</button></div><div class="field-error">Please select one</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field-group" data-toggle-required><label>Does your client have absolutely no furniture? <span class="req">*</span></label><div class="toggle-group"><button type="button" class="toggle-btn" data-field="noFurniture" data-val="Unchecked">No</button><button type="button" class="toggle-btn" data-field="noFurniture" data-val="Checked">Yes</button></div><div class="field-error">Please select one</div></div>
+        </div>
+        <div class="field-row single">
+          <div class="field-group" data-toggle-required><label>Is your client looking to replace furniture they currently have? <span class="req">*</span></label><div class="toggle-group"><button type="button" class="toggle-btn" data-field="replaceFurniture" data-val="Unchecked">No</button><button type="button" class="toggle-btn" data-field="replaceFurniture" data-val="Checked">Yes</button></div><div class="field-error">Please select one</div></div>
+        </div>
+      </div>
+      <button type="button" class="submit-btn" onclick="nextStep()">Continue to Household →</button>
+    </section>
+    <section class="form-step" data-step="1">
+      <div class="section-card">
+        <div class="section-title">Household</div>
+        <p class="section-subtitle">Delivery address and household details for matching and routing.</p>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="streetAddress">Street Address <span class="req">*</span></label><input id="streetAddress" name="streetAddress" type="text" required><div class="field-error">Required</div></div>
+          <div class="field-group"><label for="apartmentNumber">Apartment Number <span class="opt">(optional)</span></label><input id="apartmentNumber" name="apartmentNumber" type="text"></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="city">City <span class="req">*</span></label><input id="city" name="city" type="text" required><div class="field-error">Required</div></div>
+          <div class="field-group" data-required><label for="zipCode">Zip Code <span class="req">*</span></label><input id="zipCode" name="zipCode" type="text" required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="neighborhood">Neighborhood <span class="req">*</span></label><select id="neighborhood" name="neighborhood" required><option value="">Select neighborhood...</option><option>Arlington</option><option>Alexandria</option><option>Falls Church</option><option>McLean</option><option>Other</option></select><div class="field-error">Please select a neighborhood</div></div>
+          <div class="field-group" data-toggle-required><label>Does your client's building have an elevator? <span class="req">*</span></label><div class="toggle-group"><button type="button" class="toggle-btn" data-field="elevator" data-val="Unchecked">No</button><button type="button" class="toggle-btn" data-field="elevator" data-val="Checked">Yes</button></div><div class="field-error">Please select one</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="adults">Adults in Household <span class="req">*</span></label><input id="adults" name="adults" type="number" min="0" value="0" required><div class="field-error">Required</div></div>
+          <div class="field-group" data-required><label for="children">Children in Household <span class="req">*</span></label><input id="children" name="children" type="number" min="0" value="0" required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row single"><div class="field-group"><label for="preferredDropoffTime">Preferred Dropoff Time <span class="opt">(optional)</span></label><input id="preferredDropoffTime" name="preferredDropoffTime" type="text" placeholder="Example: weekday mornings"></div></div>
+      </div>
+      <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Continue to Social Worker →</button></div>
+    </section>
+    <section class="form-step" data-step="2">
+      <div class="section-card">
+        <div class="section-title">Social Worker</div>
+        <p class="section-subtitle">Confirmation emails will go to both the client and the social worker when email addresses are provided.</p>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="swFirstName">Social Worker First Name <span class="req">*</span></label><input id="swFirstName" name="swFirstName" type="text" required><div class="field-error">Required</div></div>
+          <div class="field-group" data-required><label for="swLastName">Social Worker Last Name <span class="req">*</span></label><input id="swLastName" name="swLastName" type="text" required><div class="field-error">Required</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field-group" data-required><label for="swOrganization">Social Worker Organization <span class="req">*</span></label><input id="swOrganization" name="swOrganization" type="text" required><div class="field-error">Required</div></div>
+          <div class="field-group" data-required data-email><label for="swEmail">Social Worker Email <span class="req">*</span></label><input id="swEmail" name="swEmail" type="email" required><div class="field-error">Valid email required</div></div>
+        </div>
+        <div class="field-row single"><div class="field-group" data-required><label for="swPhone">Social Worker Phone <span class="req">*</span></label><input id="swPhone" name="swPhone" type="tel" required><div class="field-error">Required</div></div></div>
+        <div class="field-row single"><div class="field-group"><label for="notes">Notes <span class="opt">(optional)</span></label><textarea id="notes" name="notes"></textarea></div></div>
+      </div>
+      <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Continue to Requests →</button></div>
+    </section>
+    <section class="form-step" data-step="3">
+      <div class="section-card">
+        <div class="section-title">Requests</div>
+        <p class="section-subtitle">Add requested furniture items. Click an item to edit it.</p>
+        <div id="itemsList" class="items-list"><div class="empty-items" id="emptyMsg">No items added yet. Click below to add the first requested item.</div></div>
+        <button type="button" class="add-btn" onclick="openModal()"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>Add Furniture Item</button>
+        <div class="field-error" id="err-items" style="margin-top:10px;">Please add at least one item</div>
+      </div>
+      <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Review Submission →</button></div>
+    </section>
+    <section class="form-step" data-step="4">
+      <div class="section-card" id="reviewCard"><div class="section-title">Review Submission</div><p class="section-subtitle">Quick check before submitting.</p><div id="reviewContent"></div></div>
+      <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back to Requests</button><button type="submit" class="submit-btn" id="submitBtn">Submit Request</button></div>
+    </section>
+  </form>
+</div>
+<div class="container" id="successScreen" style="display:none;"><div class="success-screen" style="display:block;"><div class="success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 16l7 7 13-13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h2>Request submitted!</h2><p>We've received the furniture assistance request.<br>A confirmation email has been sent to the client and social worker.</p></div></div>
+<div class="modal-overlay" id="modalOverlay"><div class="modal"><div class="modal-header"><h2 id="modalTitle">Add Furniture Item</h2><button type="button" class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="field-group"><label>Furniture Type <span class="req">*</span></label><select id="modalType"><option value="">Select a type...</option><option>Armchair/Recliner (non-power)</option><option>Bedframe (Please describe size and style)</option><option>Chest of Drawers</option><option>Coffee Table (no glass)</option><option>Computer Desk</option><option>Dining Chairs</option><option>Dining Table (seats 1-4)</option><option>Dresser (under 72&quot;)</option><option>End Table</option><option>Full Size Box Springs</option><option>Full Size Mattress</option><option>Loveseat</option><option>Nightstand</option><option>Other (Please describe)</option><option>Queen Box Springs</option><option>Queen Mattress</option><option>Sofa</option><option>TV Stand (small)</option><option>Table or Floor Lamp</option><option>Twin Box Springs (not XL)</option><option>Twin Mattress (not XL)</option></select><div class="field-error" id="err-modalType">Please select a furniture type</div></div><div class="field-group"><label>Quantity <span class="req">*</span></label><input type="number" id="modalQty" min="1" value="1"><div class="field-error" id="err-modalQty">Please enter a quantity</div></div><div class="field-group"><label>Notes <span class="opt">(optional)</span></label><textarea id="modalDesc" placeholder="Example: needs small dresser, no glass, narrow hallway"></textarea></div></div><div class="modal-footer"><button type="button" class="modal-cancel" onclick="closeModal()">Cancel</button><button type="button" class="modal-save" onclick="saveItem()">Save Item</button></div></div></div>
+<script>
+  const SCRIPT_URL = 'PASTE_APPS_SCRIPT_EXEC_URL_HERE';
+  const SHARE_NOTIFICATION_EMAIL = 'PASTE_SHARE_TEAM_EMAIL_HERE';
+  const STAFF_DEFAULTS = { status: 'New', contactMethod: '', schedulerNotes: '', deliveryTeamNotes: '', matching: '', quantityDelivered: 0 };
+  let currentStep = 0;
+  let items = [];
+  let editingIndex = null;
+  const toggleValues = { canPickup: null, elderlyDisabled: null, noFurniture: null, replaceFurniture: null, elevator: null };
+  const steps = [...document.querySelectorAll('.form-step')];
+  const tabs = [...document.querySelectorAll('.step-node')];
+  const lines = [...document.querySelectorAll('.step-line')];
+  document.getElementById('dateSubmitted').valueAsDate = new Date();
+  document.querySelectorAll('.toggle-btn').forEach(btn => btn.addEventListener('click', function() { const field = this.dataset.field; toggleValues[field] = this.dataset.val; document.querySelectorAll(`[data-field="${field}"]`).forEach(b => b.classList.remove('selected','error-toggle')); this.classList.add('selected'); const group = this.closest('.field-group'); if (group) { group.classList.remove('invalid'); const err = group.querySelector('.field-error'); if (err) err.style.display = 'none'; }}));
+  function setStep(n) { currentStep = n; steps.forEach((step, i) => step.classList.toggle('active', i === n)); tabs.forEach((tab, i) => { tab.classList.toggle('active', i === n); tab.classList.toggle('done', i < n); const circle = tab.querySelector('.step-circle'); if (circle) circle.textContent = i < n ? '✓' : String(i + 1); }); lines.forEach((line, i) => line.classList.toggle('done', i < n)); if (n === 4) buildReview(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function nextStep() { if (!validateStep(currentStep)) return; setStep(Math.min(currentStep + 1, steps.length - 1)); }
+  function prevStep() { setStep(Math.max(currentStep - 1, 0)); }
+  function attemptTab(n) { if (n <= currentStep) return setStep(n); for (let i=0; i<n; i++) { if (!validateStep(i)) return setStep(i); } setStep(n); }
+  function validateStep(stepIndex) { let ok = true; const step = steps[stepIndex]; step.querySelectorAll('input,select,textarea').forEach(el => el.classList.remove('error')); step.querySelectorAll('.field-group').forEach(g => g.classList.remove('invalid')); step.querySelectorAll('.field-error').forEach(e => e.style.display = 'none'); step.querySelectorAll('[data-required]').forEach(group => { const el = group.querySelector('input,select,textarea'); const value = (el.value || '').trim(); const emailOk = !group.hasAttribute('data-email') || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); if (!value || !emailOk) { el.classList.add('error'); group.querySelector('.field-error').style.display = 'block'; ok = false; }}); step.querySelectorAll('input[type="email"]').forEach(el => { if (el.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim())) { el.classList.add('error'); const err = el.closest('.field-group').querySelector('.field-error'); if (err) err.style.display = 'block'; ok = false; }}); step.querySelectorAll('[data-toggle-required]').forEach(group => { const field = group.querySelector('.toggle-btn').dataset.field; if (!toggleValues[field]) { group.querySelectorAll('.toggle-btn').forEach(b => b.classList.add('error-toggle')); group.querySelector('.field-error').style.display = 'block'; ok = false; }}); if ((stepIndex === 3 || stepIndex === 4) && items.length === 0) { const errItems = document.getElementById('err-items'); if (errItems) errItems.style.display = 'block'; ok = false; } return ok; }
+  function openModal(editIdx) { editingIndex = editIdx !== undefined ? editIdx : null; document.getElementById('modalTitle').textContent = editingIndex !== null ? 'Edit Furniture Item' : 'Add Furniture Item'; const item = editingIndex !== null ? items[editingIndex] : null; document.getElementById('modalType').value = item ? item.furnitureType : ''; document.getElementById('modalQty').value = item ? item.quantityRequested : 1; document.getElementById('modalDesc').value = item ? item.notes : ''; ['modalType','modalQty'].forEach(id => { document.getElementById(id).classList.remove('error'); document.getElementById('err-' + id).style.display = 'none'; }); document.getElementById('modalOverlay').classList.add('open'); document.body.style.overflow = 'hidden'; }
+  function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); document.body.style.overflow = ''; editingIndex = null; }
+  document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target.id === 'modalOverlay') closeModal(); });
+  function saveItem() { const type = document.getElementById('modalType').value; const qty = Number(document.getElementById('modalQty').value); const notes = document.getElementById('modalDesc').value.trim(); let ok = true; if (!type) { document.getElementById('modalType').classList.add('error'); document.getElementById('err-modalType').style.display = 'block'; ok = false; } if (!qty || qty < 1) { document.getElementById('modalQty').classList.add('error'); document.getElementById('err-modalQty').style.display = 'block'; ok = false; } if (!ok) return; const item = { furnitureType: type, quantityRequested: qty, notes, quantityDelivered: 0, status: 'Requested' }; if (editingIndex !== null) items[editingIndex] = item; else items.push(item); closeModal(); renderItems(); buildReview(); }
+  function removeItem(i) { items.splice(i,1); renderItems(); buildReview(); }
+  function renderItems() { const list = document.getElementById('itemsList'); list.innerHTML = ''; if (!items.length) { list.innerHTML = '<div class="empty-items" id="emptyMsg">No items added yet. Click below to add the first requested item.</div>'; return; } items.forEach((item, i) => { const chip = document.createElement('div'); chip.className = 'item-chip'; chip.innerHTML = `<div class="item-chip-info"><strong>${esc(item.furnitureType)}</strong><span>Qty: ${esc(item.quantityRequested)}${item.notes ? ' · ' + esc(item.notes.substring(0, 70)) + (item.notes.length > 70 ? '…' : '') : ''}</span></div><div class="item-chip-actions"><button type="button" class="chip-btn" onclick="openModal(${i})">Edit</button><button type="button" class="chip-btn remove" onclick="removeItem(${i})">Remove</button></div>`; list.appendChild(chip); }); document.getElementById('err-items').style.display = 'none'; }
+  function val(name) { const el = document.querySelector(`[name="${name}"]`); return el ? el.value.trim() : ''; }
+  function yesNo(v) { if (v === 'Checked') return 'Yes'; if (v === 'Unchecked') return 'No'; return '—'; }
+  function collectPayload() { return { source: 'client-intake-form', shareNotificationEmail: SHARE_NOTIFICATION_EMAIL, request: { dateSubmitted: val('dateSubmitted'), clientFirstName: val('clientFirstName'), clientLastName: val('clientLastName'), clientEmail: val('clientEmail'), clientPhone: val('clientPhone'), clientLanguage: val('clientLanguage'), canPickup: toggleValues.canPickup, elderlyDisabled: toggleValues.elderlyDisabled, noFurniture: toggleValues.noFurniture, replaceFurniture: toggleValues.replaceFurniture, streetAddress: val('streetAddress'), apartmentNumber: val('apartmentNumber'), city: val('city'), zipCode: val('zipCode'), neighborhood: val('neighborhood'), elevator: toggleValues.elevator, adults: val('adults'), children: val('children'), preferredDropoffTime: val('preferredDropoffTime'), swFirstName: val('swFirstName'), swLastName: val('swLastName'), swOrganization: val('swOrganization'), swEmail: val('swEmail'), swPhone: val('swPhone'), notes: val('notes'), ...STAFF_DEFAULTS }, items }; }
+  function buildReview() { const card = document.getElementById('reviewCard'); if (!items.length && currentStep !== 4) return; const p = collectPayload().request; const address = `${p.streetAddress}${p.apartmentNumber ? ', Apt ' + p.apartmentNumber : ''}, ${p.city} ${p.zipCode}`; document.getElementById('reviewContent').innerHTML = `<div class="review-block"><div class="review-heading">Client</div>${row('Name', `${p.clientFirstName} ${p.clientLastName}`)}${row('Email', p.clientEmail)}${row('Phone', p.clientPhone)}${row('Language', p.clientLanguage)}</div><div class="review-block"><div class="review-heading">Household</div>${row('Address', address)}${row('Neighborhood', p.neighborhood)}${row('Elevator', yesNo(p.elevator))}${row('Adults / Children', `${p.adults} / ${p.children}`)}${row('Can Pickup', yesNo(p.canPickup))}${row('Elderly/Disabled', yesNo(p.elderlyDisabled))}${row('No Furniture', yesNo(p.noFurniture))}${row('Replacing Furniture', yesNo(p.replaceFurniture))}${row('Preferred Dropoff', p.preferredDropoffTime)}</div><div class="review-block"><div class="review-heading">Social Worker</div>${row('Name', `${p.swFirstName} ${p.swLastName}`)}${row('Organization', p.swOrganization)}${row('Email', p.swEmail)}${row('Phone', p.swPhone)}</div><div class="review-block"><div class="review-heading">Requested Items</div>${items.map((item, i) => row(`${i+1}. ${item.furnitureType}`, `Qty: ${item.quantityRequested}${item.notes ? ' · ' + item.notes : ''}`)).join('')}</div>${p.notes ? `<div class="review-block"><div class="review-heading">Notes</div><p>${esc(p.notes)}</p></div>` : ''}`; }
+  function row(label, value) { return `<div class="review-row"><span>${esc(label)}</span><span>${esc(value || '—')}</span></div>`; }
+  function esc(s) { return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
+  document.getElementById('requestForm').addEventListener('submit', async e => { e.preventDefault(); if (!validateStep(4)) return; const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Submitting...'; try { const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(collectPayload()) }); const result = await res.json(); if (!(result.status === 'ok' || result.success)) throw new Error(result.message || result.error || 'Submission failed'); document.getElementById('mainForm').style.display = 'none'; document.getElementById('successScreen').style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (err) { alert('Submission failed. Please try again or contact Share. ' + err.message); btn.disabled = false; btn.innerHTML = 'Submit Request'; } });
+</script>
+</body>
+</html>
