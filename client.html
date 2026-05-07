@@ -127,7 +127,7 @@
 <body>
 <header>
   <div class="logo-wrap">
-    <img src="https://lulu-share.github.io/share-donation-form/share-logo.png" alt="Share logo" class="logo-img" id="logoImg" onerror="this.style.display='none'">
+    <img src="https://lulu-share.github.io/share-furniture-form/share-logo.png" alt="Share logo" class="logo-img" id="logoImg" onerror="this.style.display='none'">
     <h1>Share Furniture</h1>
   </div>
   <p>Request Furniture Assistance</p>
@@ -240,8 +240,8 @@
 <div class="container" id="successScreen" style="display:none;"><div class="success-screen" style="display:block;"><div class="success-icon"><svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M6 16l7 7 13-13" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h2>Request submitted!</h2><p>We've received the furniture assistance request.<br>A confirmation email has been sent to the client and social worker.</p></div></div>
 <div class="modal-overlay" id="modalOverlay"><div class="modal"><div class="modal-header"><h2 id="modalTitle">Add Furniture Item</h2><button type="button" class="modal-close" onclick="closeModal()">×</button></div><div class="modal-body"><div class="field-group"><label>Furniture Type <span class="req">*</span></label><select id="modalType"><option value="">Select a type...</option><option>Armchair/Recliner (non-power)</option><option>Bedframe (Please describe size and style)</option><option>Chest of Drawers</option><option>Coffee Table (no glass)</option><option>Computer Desk</option><option>Dining Chairs</option><option>Dining Table (seats 1-4)</option><option>Dresser (under 72&quot;)</option><option>End Table</option><option>Full Size Box Springs</option><option>Full Size Mattress</option><option>Loveseat</option><option>Nightstand</option><option>Other (Please describe)</option><option>Queen Box Springs</option><option>Queen Mattress</option><option>Sofa</option><option>TV Stand (small)</option><option>Table or Floor Lamp</option><option>Twin Box Springs (not XL)</option><option>Twin Mattress (not XL)</option></select><div class="field-error" id="err-modalType">Please select a furniture type</div></div><div class="field-group"><label>Quantity <span class="req">*</span></label><input type="number" id="modalQty" min="1" value="1"><div class="field-error" id="err-modalQty">Please enter a quantity</div></div><div class="field-group"><label>Notes <span class="opt">(optional)</span></label><textarea id="modalDesc" placeholder="Example: needs small dresser, no glass, narrow hallway"></textarea></div></div><div class="modal-footer"><button type="button" class="modal-cancel" onclick="closeModal()">Cancel</button><button type="button" class="modal-save" onclick="saveItem()">Save Item</button></div></div></div>
 <script>
-  const SCRIPT_URL = 'PASTE_APPS_SCRIPT_EXEC_URL_HERE';
-  const SHARE_NOTIFICATION_EMAIL = 'PASTE_SHARE_TEAM_EMAIL_HERE';
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbydKrtd-Nbeqj1Zg600V2Ga8o2eIgfR_Us_0p10EfV1Er_ZUneIBqDZqrAVWUMwtxSlEg/exec';
+  const SHARE_NOTIFICATION_EMAIL = 'lulu@shareofmclean.org';
   const STAFF_DEFAULTS = { status: 'New', contactMethod: '', schedulerNotes: '', deliveryTeamNotes: '', matching: '', quantityDelivered: 0 };
   let currentStep = 0;
   let items = [];
