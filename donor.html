@@ -764,6 +764,12 @@
         <div class="field-error" id="err-modalType">Please select a furniture type</div>
       </div>
 
+      <div class="field-group" id="otherWhatGroup" style="display:none;">
+        <label>What is it? <span class="req">*</span></label>
+        <input type="text" id="modalOtherWhat" placeholder="e.g. blender, coffee maker, bookshelf...">
+        <div class="field-error" id="err-modalOtherWhat">Please tell us what it is</div>
+      </div>
+
       <div class="field-group">
         <label>Quantity <span class="req">*</span></label>
         <input type="text" id="modalQty" placeholder="e.g. 1">
@@ -932,6 +938,7 @@
       document.getElementById('modalType').value = item.type;
       document.getElementById('modalQty').value = item.qty;
       document.getElementById('modalDesc').value = item.desc || '';
+      document.getElementById('modalOtherWhat').value = item.otherWhat || '';
       currentPhotoFile = item.photoFile || null;
       currentPhotoDataUrl = item.photoDataUrl || null;
       if (currentPhotoDataUrl) showFilePreview(item.photoName, currentPhotoDataUrl);
@@ -940,12 +947,13 @@
       document.getElementById('modalType').value = '';
       document.getElementById('modalQty').value = '';
       document.getElementById('modalDesc').value = '';
+      document.getElementById('modalOtherWhat').value = '';
       document.getElementById('modalPhoto').value = '';
       currentPhotoFile = null; currentPhotoDataUrl = null;
       hideFilePreview();
     }
     updateOtherNoteVisibility();
-    ['modalType','modalQty','modalDesc'].forEach(function(id) {
+    ['modalType','modalQty','modalDesc','modalOtherWhat'].forEach(function(id) {
       document.getElementById(id).classList.remove('error');
       document.getElementById('err-' + id).style.display = 'none';
     });
@@ -953,9 +961,15 @@
     document.body.style.overflow = 'hidden';
   }
 
+  function isOtherType(type) {
+    return type.indexOf('Other') === 0;
+  }
+
   function updateOtherNoteVisibility() {
     var type = document.getElementById('modalType').value;
-    document.getElementById('typeDescOtherNote').style.display = (type.indexOf('Other') === 0) ? 'block' : 'none';
+    var isOther = isOtherType(type);
+    document.getElementById('typeDescOtherNote').style.display = isOther ? 'block' : 'none';
+    document.getElementById('otherWhatGroup').style.display = isOther ? 'block' : 'none';
   }
 
   document.getElementById('modalType').addEventListener('change', updateOtherNoteVisibility);
@@ -974,6 +988,7 @@
     var type = document.getElementById('modalType').value;
     var qty  = document.getElementById('modalQty').value.trim();
     var desc = document.getElementById('modalDesc').value.trim();
+    var otherWhat = document.getElementById('modalOtherWhat').value.trim();
     var ok   = true;
     if (!type) {
       document.getElementById('modalType').classList.add('error');
@@ -981,6 +996,13 @@
     } else {
       document.getElementById('modalType').classList.remove('error');
       document.getElementById('err-modalType').style.display = 'none';
+    }
+    if (isOtherType(type) && !otherWhat) {
+      document.getElementById('modalOtherWhat').classList.add('error');
+      document.getElementById('err-modalOtherWhat').style.display = 'block'; ok = false;
+    } else {
+      document.getElementById('modalOtherWhat').classList.remove('error');
+      document.getElementById('err-modalOtherWhat').style.display = 'none';
     }
     if (!qty) {
       document.getElementById('modalQty').classList.add('error');
@@ -1002,6 +1024,7 @@
       type: type,
       qty: qty,
       desc: desc,
+      otherWhat: isOtherType(type) ? otherWhat : '',
       photoFile: currentPhotoFile,
       photoDataUrl: currentPhotoDataUrl,
       photoName: currentPhotoFile ? currentPhotoFile.name : null
@@ -1035,7 +1058,7 @@
       chip.className = 'item-chip';
       chip.innerHTML =
         '<div class="item-chip-info">' +
-          '<strong>' + escHtml(item.type) + '</strong>' +
+          '<strong>' + (item.otherWhat ? escHtml(item.otherWhat) : escHtml(item.type)) + '</strong>' +
           '<span>Qty: ' + escHtml(item.qty) + (item.desc ? ' · ' + escHtml(item.desc.substring(0,60)) + (item.desc.length > 60 ? '…' : '') : '') + '</span>' +
         '</div>' +
         '<div class="item-chip-actions">' +
@@ -1141,7 +1164,7 @@
     html += '<div style="font-size:12px;text-transform:uppercase;letter-spacing:0.8px;color:var(--muted);margin-bottom:10px;font-weight:500;">' + items.length + ' Item' + (items.length > 1 ? 's' : '') + '</div>';
     items.forEach(function(item, i) {
       html += '<div style="padding:12px 0;border-top:1px solid var(--border);">' +
-        '<div style="font-weight:500;font-size:14px;margin-bottom:4px;">' + (i+1) + '. ' + escHtml(item.type) + '</div>' +
+        '<div style="font-weight:500;font-size:14px;margin-bottom:4px;">' + (i+1) + '. ' + (item.otherWhat ? escHtml(item.otherWhat) + ' (' + escHtml(item.type) + ')' : escHtml(item.type)) + '</div>' +
         '<div style="font-size:13px;color:var(--muted);">Qty: ' + escHtml(item.qty) +
         (item.desc ? ' · ' + escHtml(item.desc) : '') +
         (item.photoName ? ' · Photo: ' + escHtml(item.photoName) : '') + '</div></div>';
@@ -1214,6 +1237,7 @@
         type:      item.type,
         qty:       item.qty,
         desc:      item.desc || '',
+        otherWhat: item.otherWhat || '',
         photoName: item.photoName || '',
         photoData: item.photoDataUrl || ''
       };
