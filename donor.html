@@ -1235,11 +1235,11 @@
     };
  
     var itemsData = items.map(function(item) {
+      var combinedDesc = item.otherWhat ? item.otherWhat + (item.desc ? ' — ' + item.desc : '') : (item.desc || '');
       return {
         type:      item.type,
         qty:       item.qty,
-        desc:      item.desc || '',
-        otherWhat: item.otherWhat || '',
+        desc:      combinedDesc,
         photoName: item.photoName || '',
         photoData: item.photoDataUrl || ''
       };
