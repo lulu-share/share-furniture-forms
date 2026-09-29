@@ -1076,14 +1076,14 @@
      var file = input.files[0];
   if (!file) return;
 
-  resizeImage(file, 1400, 0.75, function(resizedDataUrl) {
+  resizeImage(file, 1600, 0.75, function(resizedDataUrl) {
     currentPhotoFile = file;
     currentPhotoDataUrl = resizedDataUrl;
     showFilePreview(file.name, resizedDataUrl);
   });
   }
 
- function resizeImage(file, maxWidth, quality, callback) {
+ function resizeImage(file, maxDimension, quality, callback) {
   var reader = new FileReader();
 
   reader.onload = function(e) {
@@ -1094,10 +1094,12 @@
 
       var width = img.width;
       var height = img.height;
+      var longestSide = Math.max(width, height);
 
-      if (width > maxWidth) {
-        height = Math.round(height * (maxWidth / width));
-        width = maxWidth;
+      if (longestSide > maxDimension) {
+        var scale = maxDimension / longestSide;
+        width = Math.round(width * scale);
+        height = Math.round(height * scale);
       }
 
       canvas.width = width;
