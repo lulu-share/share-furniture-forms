@@ -806,7 +806,7 @@
       </div>
  
       <div class="field-group">
-        <label>Photo <span class="opt">(optional)</span></label>
+        <label>Photo <span class="req">*</span></label>
         <div class="file-upload-area" id="fileUploadArea">
           <input type="file" id="modalPhoto" accept="image/*" onchange="handleFileSelect(this)">
           <div class="file-upload-icon">
@@ -822,6 +822,7 @@
           <span class="file-preview-name" id="filePreviewName"></span>
           <button class="file-remove" onclick="removeFile()">×</button>
         </div>
+        <div class="field-error" id="err-modalPhoto">Please upload a photo of this item</div>
       </div>
  
     </div>
@@ -963,6 +964,7 @@
       document.getElementById(id).classList.remove('error');
       document.getElementById('err-' + id).style.display = 'none';
     });
+    document.getElementById('err-modalPhoto').style.display = 'none';
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
@@ -1024,6 +1026,11 @@
       document.getElementById('modalDesc').classList.remove('error');
       document.getElementById('err-modalDesc').style.display = 'none';
     }
+    if (!currentPhotoDataUrl) {
+      document.getElementById('err-modalPhoto').style.display = 'block'; ok = false;
+    } else {
+      document.getElementById('err-modalPhoto').style.display = 'none';
+    }
     if (!ok) return;
 
     var item = {
@@ -1084,6 +1091,7 @@
     currentPhotoFile = file;
     currentPhotoDataUrl = resizedDataUrl;
     showFilePreview(file.name, resizedDataUrl);
+    document.getElementById('err-modalPhoto').style.display = 'none';
   });
   }
 
