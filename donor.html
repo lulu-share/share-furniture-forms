@@ -461,6 +461,7 @@
     position: relative;
   }
   .file-upload-area:hover { border-color: var(--gold); background: rgba(232,160,32,0.04); }
+  .file-upload-area.error { border-color: var(--danger); }
   .file-upload-area input[type="file"] {
     position: absolute;
     inset: 0;
@@ -964,6 +965,7 @@
       document.getElementById(id).classList.remove('error');
       document.getElementById('err-' + id).style.display = 'none';
     });
+    document.getElementById('fileUploadArea').classList.remove('error');
     document.getElementById('err-modalPhoto').style.display = 'none';
     document.getElementById('modalOverlay').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -1027,8 +1029,10 @@
       document.getElementById('err-modalDesc').style.display = 'none';
     }
     if (!currentPhotoDataUrl) {
+      document.getElementById('fileUploadArea').classList.add('error');
       document.getElementById('err-modalPhoto').style.display = 'block'; ok = false;
     } else {
+      document.getElementById('fileUploadArea').classList.remove('error');
       document.getElementById('err-modalPhoto').style.display = 'none';
     }
     if (!ok) return;
@@ -1091,6 +1095,7 @@
     currentPhotoFile = file;
     currentPhotoDataUrl = resizedDataUrl;
     showFilePreview(file.name, resizedDataUrl);
+    document.getElementById('fileUploadArea').classList.remove('error');
     document.getElementById('err-modalPhoto').style.display = 'none';
   });
   }
