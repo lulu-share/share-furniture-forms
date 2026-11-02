@@ -76,6 +76,11 @@
   .help { color: var(--muted); font-size: 12px; margin-top: 4px; line-height: 1.45; }
   .form-step { display: none; }
   .form-step.active { display: block; }
+  .snb-intro { font-size: 14px; line-height: 1.6; margin-bottom: 16px; }
+  .snb-criteria { font-size: 14px; line-height: 1.6; margin: 0 0 20px 20px; }
+  .snb-criteria li { margin-bottom: 8px; }
+  .snb-choice { display: flex; align-items: flex-start; gap: 10px; font-size: 14px; font-weight: 500; padding: 8px 0; margin-bottom: 0; cursor: pointer; }
+  .snb-choice input { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; accent-color: var(--gold); }
   .actions { display: flex; gap: 12px; margin-top: 12px; }
   .submit-btn, .secondary-btn { width: 100%; padding: 15px; border: none; border-radius: var(--radius); font-family: 'DM Serif Display', serif; font-size: 18px; letter-spacing: 0.2px; cursor: pointer; transition: background 0.2s, transform 0.1s; }
   .submit-btn { background: var(--black); color: #fff; }
@@ -121,7 +126,7 @@
   .success-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; }
   .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; vertical-align: middle; margin-right: 8px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  @media (max-width: 640px) { .field-row { grid-template-columns: 1fr; } .section-card { padding: 20px 16px; } .progress-steps { max-width: 100%; } .step-node { min-width: 58px; } .step-circle { width: 34px; height: 34px; font-size: 13px; } .step-label { font-size: 10px; } .step-line { margin-top: 16px; min-width: 10px; } .actions { flex-direction: column-reverse; } .modal-body, .modal-footer { padding-left: 16px; padding-right: 16px; } }
+  @media (max-width: 640px) { .field-row { grid-template-columns: 1fr; } .section-card { padding: 20px 16px; } .progress-steps { max-width: 100%; } .step-node { min-width: 0; flex: 1; padding: 0; } .step-circle { width: 34px; height: 34px; font-size: 13px; } .step-label { font-size: 10px; white-space: normal; text-align: center; line-height: 1.2; } .step-line { margin-top: 16px; min-width: 0; flex: 0 1 6px; } .actions { flex-direction: column-reverse; } .modal-body, .modal-footer { padding-left: 16px; padding-right: 16px; } }
 </style>
 </head>
 <body>
@@ -134,20 +139,40 @@
 </header>
 <div class="progress-wrap">
   <nav class="progress-steps" aria-label="Form progress">
-    <button type="button" class="step-node active" data-tab="0" onclick="attemptTab(0)"><span class="step-circle">1</span><span class="step-label">Client</span></button>
+    <button type="button" class="step-node active" data-tab="0" onclick="attemptTab(0)"><span class="step-circle">1</span><span class="step-label">SNB</span></button>
     <div class="step-line" data-line="0"></div>
-    <button type="button" class="step-node" data-tab="1" onclick="attemptTab(1)"><span class="step-circle">2</span><span class="step-label">Household</span></button>
+    <button type="button" class="step-node" data-tab="1" onclick="attemptTab(1)"><span class="step-circle">2</span><span class="step-label">Client</span></button>
     <div class="step-line" data-line="1"></div>
-    <button type="button" class="step-node" data-tab="2" onclick="attemptTab(2)"><span class="step-circle">3</span><span class="step-label">Social Worker</span></button>
+    <button type="button" class="step-node" data-tab="2" onclick="attemptTab(2)"><span class="step-circle">3</span><span class="step-label">Household</span></button>
     <div class="step-line" data-line="2"></div>
-    <button type="button" class="step-node" data-tab="3" onclick="attemptTab(3)"><span class="step-circle">4</span><span class="step-label">Requests</span></button>
+    <button type="button" class="step-node" data-tab="3" onclick="attemptTab(3)"><span class="step-circle">4</span><span class="step-label">Social Worker</span></button>
     <div class="step-line" data-line="3"></div>
-    <button type="button" class="step-node" data-tab="4" onclick="attemptTab(4)"><span class="step-circle">5</span><span class="step-label">Review</span></button>
+    <button type="button" class="step-node" data-tab="4" onclick="attemptTab(4)"><span class="step-circle">5</span><span class="step-label">Requests</span></button>
+    <div class="step-line" data-line="4"></div>
+    <button type="button" class="step-node" data-tab="5" onclick="attemptTab(5)"><span class="step-circle">6</span><span class="step-label">Review</span></button>
   </nav>
 </div>
 <div class="container" id="mainForm">
   <form id="requestForm" novalidate>
     <section class="form-step active" data-step="0">
+      <div class="section-card">
+        <div class="section-title">Share New Beginnings Program Referral</div>
+        <p class="snb-intro">The Share New Beginnings program provides furniture and household goods to clients moving into permanent housing. Volunteers spend around 3 hours setting up the client’s home, leaving the client with a fully furnished and functioning place to live. Please review the criteria below and check the box that applies.</p>
+        <p class="snb-intro">A good fit for Share New Beginnings is a client who:</p>
+        <ol class="snb-criteria">
+          <li><strong>Has recently moved and has little or no furniture or household goods.</strong> The program is designed for households starting from scratch or close to it.</li>
+          <li><strong>Is responsive and able to partner with Share staff.</strong> The client is reachable, keeps appointments, and is willing to work closely with staff to assess needs and help decide which items fit the home and the household.</li>
+          <li><strong>Can have the home ready for delivery.</strong> The client will keep the home reasonably clean and clear of clutter so volunteers have room to bring items in and set them up.</li>
+        </ol>
+        <div class="field-group">
+          <label class="snb-choice"><input type="checkbox" name="snbReferral" value="Checked">Yes, this client is a good fit for the Share New Beginnings Program.</label>
+          <label class="snb-choice"><input type="checkbox" name="snbReferral" value="Unchecked">No, this client is not a good fit for the Share New Beginnings Program.</label>
+          <div class="field-error" id="err-snbReferral">Please select one</div>
+        </div>
+      </div>
+      <button type="button" class="submit-btn" onclick="if (validateStep(0)) nextStep()">Continue to Client →</button>
+    </section>
+    <section class="form-step" data-step="1">
       <div class="section-card">
         <div class="section-title">Client</div>
         <p class="section-subtitle">Please fill out each tab shown above. This form is intended for social workers submitting on behalf of a client.</p>
@@ -178,9 +203,9 @@
           <div class="field-group" data-toggle-required><label>Is your client looking to replace furniture they currently have? <span class="req">*</span></label><div class="toggle-group"><button type="button" class="toggle-btn" data-field="replaceFurniture" data-val="Unchecked">No</button><button type="button" class="toggle-btn" data-field="replaceFurniture" data-val="Checked">Yes</button></div><div class="field-error">Please select one</div></div>
         </div>
       </div>
-      <button type="button" class="submit-btn" onclick="nextStep()">Continue to Household →</button>
+      <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Continue to Household →</button></div>
     </section>
-    <section class="form-step" data-step="1">
+    <section class="form-step" data-step="2">
       <div class="section-card">
         <div class="section-title">Household</div>
         <p class="section-subtitle">Delivery address and household details for matching and routing.</p>
@@ -204,7 +229,7 @@
       </div>
       <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Continue to Social Worker →</button></div>
     </section>
-    <section class="form-step" data-step="2">
+    <section class="form-step" data-step="3">
       <div class="section-card">
         <div class="section-title">Social Worker</div>
         <p class="section-subtitle">Confirmation emails will go to both the client and the social worker when email addresses are provided.</p>
@@ -221,7 +246,7 @@
       </div>
       <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Continue to Requests →</button></div>
     </section>
-    <section class="form-step" data-step="3">
+    <section class="form-step" data-step="4">
       <div class="section-card">
         <div class="section-title">Requests</div>
         <p class="section-subtitle">Add requested furniture items. Click an item to edit it.</p>
@@ -231,7 +256,7 @@
       </div>
       <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back</button><button type="button" class="submit-btn" onclick="nextStep()">Review Submission →</button></div>
     </section>
-    <section class="form-step" data-step="4">
+    <section class="form-step" data-step="5">
       <div class="section-card" id="reviewCard"><div class="section-title">Review Submission</div><p class="section-subtitle">Quick check before submitting.</p><div id="reviewContent"></div></div>
       <div class="actions"><button type="button" class="secondary-btn" onclick="prevStep()">← Back to Requests</button><button type="submit" class="submit-btn" id="submitBtn">Submit Request</button></div>
     </section>
@@ -250,18 +275,21 @@
   // Retries a couple times before giving up, since the Apps Script endpoint occasionally fails on Google's side even when the row was written.
   // Reuses the same idempotencyKey across attempts so a retry can't create a duplicate request once the backend checks for it.
   async function submitWithRetry(payload, attemptsLeft) { try { const res = await fetch(SCRIPT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) }); return await res.json(); } catch (err) { if (attemptsLeft > 1) { await new Promise(r => setTimeout(r, 1200)); return submitWithRetry(payload, attemptsLeft - 1); } throw err; } }
-  const toggleValues = { canPickup: null, elderlyDisabled: null, noFurniture: null, replaceFurniture: null, elevator: null };
+  const toggleValues = { snbReferral: null, canPickup: null, elderlyDisabled: null, noFurniture: null, replaceFurniture: null, elevator: null };
   const steps = [...document.querySelectorAll('.form-step')];
   const tabs = [...document.querySelectorAll('.step-node')];
   const lines = [...document.querySelectorAll('.step-line')];
   document.getElementById('dateSubmitted').valueAsDate = new Date();
+  // Yes and No are checkboxes, so checking one has to clear the other by hand.
+  const snbBoxes = [...document.querySelectorAll('input[name="snbReferral"]')];
+  snbBoxes.forEach(box => box.addEventListener('change', function() { snbBoxes.forEach(b => { if (b !== this) b.checked = false; }); toggleValues.snbReferral = this.checked ? this.value : null; if (this.checked) document.getElementById('err-snbReferral').style.display = 'none'; }));
   document.querySelectorAll('.toggle-btn').forEach(btn => btn.addEventListener('click', function() { const field = this.dataset.field; toggleValues[field] = this.dataset.val; document.querySelectorAll(`[data-field="${field}"]`).forEach(b => b.classList.remove('selected','error-toggle')); this.classList.add('selected'); const group = this.closest('.field-group'); if (group) { group.classList.remove('invalid'); const err = group.querySelector('.field-error'); if (err) err.style.display = 'none'; }}));
-  function setStep(n) { currentStep = n; steps.forEach((step, i) => step.classList.toggle('active', i === n)); tabs.forEach((tab, i) => { tab.classList.toggle('active', i === n); tab.classList.toggle('done', i < n); const circle = tab.querySelector('.step-circle'); if (circle) circle.textContent = i < n ? '✓' : String(i + 1); }); lines.forEach((line, i) => line.classList.toggle('done', i < n)); if (n === 4) buildReview(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  function setStep(n) { currentStep = n; steps.forEach((step, i) => step.classList.toggle('active', i === n)); tabs.forEach((tab, i) => { tab.classList.toggle('active', i === n); tab.classList.toggle('done', i < n); const circle = tab.querySelector('.step-circle'); if (circle) circle.textContent = i < n ? '✓' : String(i + 1); }); lines.forEach((line, i) => line.classList.toggle('done', i < n)); if (n === 5) buildReview(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
   function nextStep() { setStep(Math.min(currentStep + 1, steps.length - 1)); }
   function prevStep() { setStep(Math.max(currentStep - 1, 0)); }
-  function attemptTab(n) { setStep(n); }
-  function validateStep(stepIndex) { let ok = true; const step = steps[stepIndex]; step.querySelectorAll('input,select,textarea').forEach(el => el.classList.remove('error')); step.querySelectorAll('.field-group').forEach(g => g.classList.remove('invalid')); step.querySelectorAll('.field-error').forEach(e => e.style.display = 'none'); step.querySelectorAll('[data-required]').forEach(group => { const el = group.querySelector('input,select,textarea'); const value = (el.value || '').trim(); const emailOk = !group.hasAttribute('data-email') || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); if (!value || !emailOk) { el.classList.add('error'); group.querySelector('.field-error').style.display = 'block'; ok = false; }}); step.querySelectorAll('input[type="email"]').forEach(el => { if (el.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim())) { el.classList.add('error'); const err = el.closest('.field-group').querySelector('.field-error'); if (err) err.style.display = 'block'; ok = false; }}); step.querySelectorAll('[data-toggle-required]').forEach(group => { const field = group.querySelector('.toggle-btn').dataset.field; if (!toggleValues[field]) { group.querySelectorAll('.toggle-btn').forEach(b => b.classList.add('error-toggle')); group.querySelector('.field-error').style.display = 'block'; ok = false; }}); if ((stepIndex === 3 || stepIndex === 4) && items.length === 0) { const errItems = document.getElementById('err-items'); if (errItems) errItems.style.display = 'block'; ok = false; } return ok; }
-  function validateAll() { const results = [0,1,2,3].map(i => validateStep(i)); const firstInvalid = results.indexOf(false); if (firstInvalid !== -1) { setStep(firstInvalid); return false; } return true; }
+  function attemptTab(n) { if (currentStep === 0 && n !== 0 && !validateStep(0)) return; setStep(n); }
+  function validateStep(stepIndex) { let ok = true; const step = steps[stepIndex]; step.querySelectorAll('input,select,textarea').forEach(el => el.classList.remove('error')); step.querySelectorAll('.field-group').forEach(g => g.classList.remove('invalid')); step.querySelectorAll('.field-error').forEach(e => e.style.display = 'none'); step.querySelectorAll('[data-required]').forEach(group => { const el = group.querySelector('input,select,textarea'); const value = (el.value || '').trim(); const emailOk = !group.hasAttribute('data-email') || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value); if (!value || !emailOk) { el.classList.add('error'); group.querySelector('.field-error').style.display = 'block'; ok = false; }}); step.querySelectorAll('input[type="email"]').forEach(el => { if (el.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(el.value.trim())) { el.classList.add('error'); const err = el.closest('.field-group').querySelector('.field-error'); if (err) err.style.display = 'block'; ok = false; }}); step.querySelectorAll('[data-toggle-required]').forEach(group => { const field = group.querySelector('.toggle-btn').dataset.field; if (!toggleValues[field]) { group.querySelectorAll('.toggle-btn').forEach(b => b.classList.add('error-toggle')); group.querySelector('.field-error').style.display = 'block'; ok = false; }}); if ((stepIndex === 4 || stepIndex === 5) && items.length === 0) { const errItems = document.getElementById('err-items'); if (errItems) errItems.style.display = 'block'; ok = false; } if (stepIndex === 0 && !toggleValues.snbReferral) { document.getElementById('err-snbReferral').style.display = 'block'; ok = false; } return ok; }
+  function validateAll() { const results = [0,1,2,3,4].map(i => validateStep(i)); const firstInvalid = results.indexOf(false); if (firstInvalid !== -1) { setStep(firstInvalid); return false; } return true; }
   function typeNeedsDescription(type) { return type.indexOf('Please describe') !== -1; }
   function updateTypeDescVisibility() { const type = document.getElementById('modalType').value; const needsDesc = typeNeedsDescription(type); document.getElementById('typeDescGroup').style.display = needsDesc ? 'block' : 'none'; document.getElementById('typeDescOtherNote').style.display = (needsDesc && type.indexOf('Other') === 0) ? 'block' : 'none'; document.getElementById('typeDescBedframeNote').style.display = (needsDesc && type.indexOf('Bedframe') === 0) ? 'block' : 'none'; }
   document.getElementById('modalType').addEventListener('change', updateTypeDescVisibility);
@@ -273,8 +301,8 @@
   function renderItems() { const list = document.getElementById('itemsList'); list.innerHTML = ''; if (!items.length) { list.innerHTML = '<div class="empty-items" id="emptyMsg">No items added yet. Click below to add the first requested item.</div>'; return; } items.forEach((item, i) => { const chip = document.createElement('div'); chip.className = 'item-chip'; chip.innerHTML = `<div class="item-chip-info"><strong>${esc(item.furnitureType)}</strong><span>Qty: ${esc(item.quantityRequested)}${item.typeDescription ? ' · ' + esc(item.typeDescription.substring(0, 70)) + (item.typeDescription.length > 70 ? '…' : '') : ''}${item.notes ? ' · ' + esc(item.notes.substring(0, 70)) + (item.notes.length > 70 ? '…' : '') : ''}</span></div><div class="item-chip-actions"><button type="button" class="chip-btn" onclick="openModal(${i})">Edit</button><button type="button" class="chip-btn remove" onclick="removeItem(${i})">Remove</button></div>`; list.appendChild(chip); }); document.getElementById('err-items').style.display = 'none'; }
   function val(name) { const el = document.querySelector(`[name="${name}"]`); return el ? el.value.trim() : ''; }
   function yesNo(v) { if (v === 'Checked') return 'Yes'; if (v === 'Unchecked') return 'No'; return '—'; }
-  function collectPayload() { return { source: 'client-intake-form', request: { dateSubmitted: val('dateSubmitted'), clientFirstName: val('clientFirstName'), clientLastName: val('clientLastName'), clientEmail: val('clientEmail'), clientPhone: val('clientPhone'), clientLanguage: val('clientLanguage'), canPickup: toggleValues.canPickup, elderlyDisabled: toggleValues.elderlyDisabled, noFurniture: toggleValues.noFurniture, replaceFurniture: toggleValues.replaceFurniture, streetAddress: val('streetAddress'), apartmentNumber: val('apartmentNumber'), city: val('city'), zipCode: val('zipCode'), neighborhood: val('neighborhood'), elevator: toggleValues.elevator, adults: val('adults'), children: val('children'), preferredDropoffTime: val('preferredDropoffTime'), swFirstName: val('swFirstName'), swLastName: val('swLastName'), swOrganization: val('swOrganization'), swEmail: val('swEmail'), swPhone: val('swPhone'), notes: val('notes'), ...STAFF_DEFAULTS }, items }; }
-  function buildReview() { const card = document.getElementById('reviewCard'); if (!items.length && currentStep !== 4) return; const p = collectPayload().request; const address = `${p.streetAddress}${p.apartmentNumber ? ', Apt ' + p.apartmentNumber : ''}, ${p.city} ${p.zipCode}`; document.getElementById('reviewContent').innerHTML = `<div class="review-block"><div class="review-heading">Client</div>${row('Name', `${p.clientFirstName} ${p.clientLastName}`)}${row('Email', p.clientEmail)}${row('Phone', p.clientPhone)}${row('Language', p.clientLanguage)}</div><div class="review-block"><div class="review-heading">Household</div>${row('Address', address)}${row('Neighborhood', p.neighborhood)}${row('Elevator', yesNo(p.elevator))}${row('Adults / Children', `${p.adults} / ${p.children}`)}${row('Can Pickup', yesNo(p.canPickup))}${row('Elderly/Disabled', yesNo(p.elderlyDisabled))}${row('No Furniture', yesNo(p.noFurniture))}${row('Replacing Furniture', yesNo(p.replaceFurniture))}${row('Preferred Dropoff', p.preferredDropoffTime)}</div><div class="review-block"><div class="review-heading">Social Worker</div>${row('Name', `${p.swFirstName} ${p.swLastName}`)}${row('Organization', p.swOrganization)}${row('Email', p.swEmail)}${row('Phone', p.swPhone)}</div><div class="review-block"><div class="review-heading">Requested Items</div>${items.map((item, i) => row(`${i+1}. ${item.furnitureType}`, `Qty: ${item.quantityRequested}${item.typeDescription ? ' · ' + item.typeDescription : ''}${item.notes ? ' · ' + item.notes : ''}`)).join('')}</div>${p.notes ? `<div class="review-block"><div class="review-heading">Notes</div><p>${esc(p.notes)}</p></div>` : ''}`; }
+  function collectPayload() { return { source: 'client-intake-form', request: { snbReferral: toggleValues.snbReferral, dateSubmitted: val('dateSubmitted'), clientFirstName: val('clientFirstName'), clientLastName: val('clientLastName'), clientEmail: val('clientEmail'), clientPhone: val('clientPhone'), clientLanguage: val('clientLanguage'), canPickup: toggleValues.canPickup, elderlyDisabled: toggleValues.elderlyDisabled, noFurniture: toggleValues.noFurniture, replaceFurniture: toggleValues.replaceFurniture, streetAddress: val('streetAddress'), apartmentNumber: val('apartmentNumber'), city: val('city'), zipCode: val('zipCode'), neighborhood: val('neighborhood'), elevator: toggleValues.elevator, adults: val('adults'), children: val('children'), preferredDropoffTime: val('preferredDropoffTime'), swFirstName: val('swFirstName'), swLastName: val('swLastName'), swOrganization: val('swOrganization'), swEmail: val('swEmail'), swPhone: val('swPhone'), notes: val('notes'), ...STAFF_DEFAULTS }, items }; }
+  function buildReview() { const card = document.getElementById('reviewCard'); if (!items.length && currentStep !== 5) return; const p = collectPayload().request; const address = `${p.streetAddress}${p.apartmentNumber ? ', Apt ' + p.apartmentNumber : ''}, ${p.city} ${p.zipCode}`; document.getElementById('reviewContent').innerHTML = `<div class="review-block"><div class="review-heading">Share New Beginnings</div>${row('SNB Referral', yesNo(p.snbReferral))}</div><div class="review-block"><div class="review-heading">Client</div>${row('Name', `${p.clientFirstName} ${p.clientLastName}`)}${row('Email', p.clientEmail)}${row('Phone', p.clientPhone)}${row('Language', p.clientLanguage)}</div><div class="review-block"><div class="review-heading">Household</div>${row('Address', address)}${row('Neighborhood', p.neighborhood)}${row('Elevator', yesNo(p.elevator))}${row('Adults / Children', `${p.adults} / ${p.children}`)}${row('Can Pickup', yesNo(p.canPickup))}${row('Elderly/Disabled', yesNo(p.elderlyDisabled))}${row('No Furniture', yesNo(p.noFurniture))}${row('Replacing Furniture', yesNo(p.replaceFurniture))}${row('Preferred Dropoff', p.preferredDropoffTime)}</div><div class="review-block"><div class="review-heading">Social Worker</div>${row('Name', `${p.swFirstName} ${p.swLastName}`)}${row('Organization', p.swOrganization)}${row('Email', p.swEmail)}${row('Phone', p.swPhone)}</div><div class="review-block"><div class="review-heading">Requested Items</div>${items.map((item, i) => row(`${i+1}. ${item.furnitureType}`, `Qty: ${item.quantityRequested}${item.typeDescription ? ' · ' + item.typeDescription : ''}${item.notes ? ' · ' + item.notes : ''}`)).join('')}</div>${p.notes ? `<div class="review-block"><div class="review-heading">Notes</div><p>${esc(p.notes)}</p></div>` : ''}`; }
   function row(label, value) { return `<div class="review-row"><span>${esc(label)}</span><span>${esc(value || '—')}</span></div>`; }
   function esc(s) { return String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m])); }
   document.getElementById('requestForm').addEventListener('submit', async e => { e.preventDefault(); if (!validateAll()) return; if (!submissionId) submissionId = generateId(); const btn = document.getElementById('submitBtn'); btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Submitting...'; try { const payload = { ...collectPayload(), idempotencyKey: submissionId }; const result = await submitWithRetry(payload, 3); if (result && (result.status === 'ok' || result.success)) { document.getElementById('mainForm').style.display = 'none'; document.getElementById('successScreen').style.display = 'block'; window.scrollTo({ top: 0, behavior: 'smooth' }); } else { alert('Something went wrong: ' + ((result && result.message) || 'unknown error')); btn.disabled = false; btn.innerHTML = 'Submit Request'; } } catch (err) { alert("We couldn't confirm your request went through. It may have already been received — please contact Share if you don't hear back, or try submitting again."); btn.disabled = false; btn.innerHTML = 'Submit Request'; } });
